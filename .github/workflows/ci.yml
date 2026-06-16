@@ -1,27 +1,33 @@
-name : Train model pipeline
+name: Model testing
 
 on:
-  push:
+  push
 
 jobs:
-  train:
-    runs-on: ubuntu-latest
+  training:
+    runs-on: 'ubuntu-latest'
+
 
     steps:
-      
-      - name: Checkout Code
+      - name: checkout code 
         uses: actions/checkout@v4
-      
-      - name: Setup Python
+
+      - name: setup python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
+          python-version: '3.12'
 
       - name: install dependencies
         run: |
-          pip install -r requirements.txt
+          pip install -r requirments.txt
       
       - name: run the test
         run: |
           python train.py
+      
+      - name: save the model
+        uses: actions/upload-artifact@v4
+        with:
+          name: trained-model
+          path: model/model.joblib
 
