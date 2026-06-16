@@ -1,27 +1,23 @@
-from fastapi import FastAPI
 from pydantic import BaseModel
+from prometheus_fastapi_instrumentator import Instrumentator
 import joblib
+from fastapi import FastAPI
+
 
 app = FastAPI()
 
+Instrumentator().instrument(app).expose(app)
+
 model = joblib.load("model/model.joblib")
 
-
-class IrisInput(BaseModel):
-    sepal_length: float
-    sepal_width: float
-    petal_length: float
-    petal_width: float
-
-
-@app.get("/")
-def home():
-    return {"message": "ML API is running"}
-
+class IrisModel(BaseModel):
+    sepal_length : float
+    sepal_width : float
+    petal_length : float
+    petal_width : float
 
 @app.post("/predict")
-def predict(data: IrisInput):
-
+def predict(data : IrisModel):
     features = [[
         data.sepal_length,
         data.sepal_width,
@@ -31,6 +27,7 @@ def predict(data: IrisInput):
 
     prediction = model.predict(features)
 
-    return {
-        "prediction": int(prediction[0])
-    }
+    return {"prediction" : int(prediction[0])}
+
+
+
