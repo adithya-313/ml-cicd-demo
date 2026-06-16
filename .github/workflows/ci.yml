@@ -15,7 +15,7 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
-          python-version:"3.12"
+          python-version: "3.12"
 
       - name: install dependencies
         run: |
@@ -24,4 +24,4 @@ jobs:
       - name: run the test
         run: |
           python train.py
-          
+
